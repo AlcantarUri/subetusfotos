@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=Borel&family=Dosis:wght@200..800&family=Funnel+Display:wght@300..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Borel&family=Dongle&family=Dosis:wght@200..800&family=Funnel+Display:wght@300&family=Gowun+Dodum&family=Poiret+One&family=Quicksand:wght@300..700&display=swap');
+
+.content {
+    top: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #0000004f;
+    justify-content: center;
+}
+
+.modal {
+    width: 80%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    max-width: 90%;
+    max-height: 90%;
+    overflow: auto;
+    text-align: center;
+
+    -webkit-box-shadow: 0px 0px 20px 6px rgba(0,0,0,0.28);
+    -moz-box-shadow: 0px 0px 20px 6px rgba(0,0,0,0.28);
+    box-shadow: 0px 0px 20px 6px rgba(0,0,0,0.28);
+}
+
+h1, h2 {
+    margin: 0;
+    font-family: "Funnel Display", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-weight: 300;
+    color: #5d5d5d;
+}
+
+h3, h4, h5, h6 {
+    font-family: "Gowun Dodum", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    margin: 0;
+    color: #757575;
+}
+
+.title {
+    text-align: center;
+    font-size: 20px;
+}
+
+.subtitle {
+    text-align: center;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.imgLogo {
+    width: 50%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.custom-file-upload {
+    margin-top: 10px;
+    cursor: pointer;
+    background-color: #cbe6f1;
+    color: #000000a1;
+    padding: 0 10px;
+    border-radius: 5px;
+    display: inline-block;
+    margin-right: 10px;
+    font-family: "Funnel Display", sans-serif;
+  }
+
+  .cancel {
+    background-color: white;
+    width: 50px;
+    height: 50px;
+    color: black;
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin-top: 10px;
+  }

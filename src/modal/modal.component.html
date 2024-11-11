@@ -1,0 +1,24 @@
+<div class="content">
+    <div class="modal">
+        <div (click)="dismissModal.emit()" class="cancel">
+            ✖
+        </div>
+        <img class="imgLogo" src="assets/images/logo.png" alt="" srcset="">
+        <h1 class="title">Bienvenido a nuestra boda</h1>
+        <h4 class="subtitle">Gracias por compartir estos momentos con nosotros </h4>
+
+        <label for="file-upload" class="custom-file-upload">
+            <div style="display: inline-flex;">
+                <ng-lottie width="40px" height="40px" [options]="options" />
+                <div style="padding-top: 10px;">
+                    Subir archivo
+                </div>
+            </div>
+        </label>
+        <h6 style="padding: 10px 20px;">
+            ¡Sube todas las fotos que quieras, no hay límite! ¡Queremos capturar cada modmento y cada sonrisa!
+        </h6>
+        <!-- <span>{{ fileName || 'No se ha seleccionado archivo' }}</span> -->
+        <input id="file-upload" type="file" (change)="onFileSelected.emit($event)" multiple style="display: none;" />
+    </div>
+</div>

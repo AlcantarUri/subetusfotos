@@ -3,11 +3,13 @@ import { Component, OnInit } from '@angular/core';
 import { GoogleDriveService } from '../services/drive.service';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { SharedModule } from '../modal/modal.module';
+import { LottieComponent } from 'ngx-lottie';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule, HttpClientModule],
+  imports: [RouterOutlet, CommonModule, HttpClientModule, SharedModule, LottieComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
@@ -17,9 +19,14 @@ export class AppComponent {
   folderId = '1QvMXts6IwHxWhakVs8fxHAADkExRnXxV';
  selectedFiles: File[] = [];
 
+modalVisible = true;
+
   constructor(private driveService: GoogleDriveService, private http: HttpClient) {}
 
   async ngOnInit() {
+    if(localStorage.getItem('MODAL_VISIBLE') === 'false') {
+      this.modalVisible = false;
+    }
     if (!this.driveService.isSignedIn()) {
       await this.driveService.signIn();
     }
@@ -34,7 +41,6 @@ export class AppComponent {
   async uploadPhoto(event: any) {
     const file = event.target.files[0];
     if (file) {
-      debugger
       await this.driveService.uploadFile(file, this.folderId);
       this.loadPhotos(); // Refresh gallery
     }
@@ -52,6 +58,9 @@ export class AppComponent {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       this.selectedFiles = Array.from(input.files);  // Almacena todos los archivos seleccionados
+      this.modalVisible = false;  // Oculta el modal
+      localStorage.setItem('MODAL_VISIBLE', 'false');  // Almacena el estado del modal
+      this.uploadPhoto2()
     }
   }
 
