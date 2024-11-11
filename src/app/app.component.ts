@@ -1,10 +1,11 @@
 import { RouterOutlet } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, EventEmitter, OnInit } from '@angular/core';
 import { GoogleDriveService } from '../services/drive.service';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { SharedModule } from '../modal/modal.module';
 import { LottieComponent } from 'ngx-lottie';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 @Component({
   selector: 'app-root',
@@ -12,16 +13,24 @@ import { LottieComponent } from 'ngx-lottie';
   imports: [RouterOutlet, CommonModule, HttpClientModule, SharedModule, LottieComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
+  providers: provideAnimations(),
+  schemas: [
+    CUSTOM_ELEMENTS_SCHEMA
+  ],
 })
 export class AppComponent {
   title = 'subetusfotos';
   photos: any[] = [];
   folderId = '1QvMXts6IwHxWhakVs8fxHAADkExRnXxV';
- selectedFiles: File[] = [];
+  selectedFiles: File[] = [];
+  everageHeight = 200;
+  isOpen: boolean = false;  // Controls whether the modal is open or not
+  isModalOpen = false;
 
-modalVisible = true;
-
-  constructor(private driveService: GoogleDriveService, private http: HttpClient) {}
+  modalVisible = true;
+  constructor(
+    private driveService: GoogleDriveService,
+    private http: HttpClient) {}
 
   async ngOnInit() {
     if(localStorage.getItem('MODAL_VISIBLE') === 'false') {
@@ -81,5 +90,21 @@ modalVisible = true;
 
     this.loadPhotos();  // Refresca la galería
   }
-  
+
+  currentImage: any;
+  openImage(photo: any) {
+    this.currentImage = photo;
+    console.log(photo);
+    this.openModal()
+
+  }
+
+  openModal(): void {
+    this.isModalOpen = true;
+  }
+
+
+  closeModal(): void {
+    this.isModalOpen = false;
+  }
 }

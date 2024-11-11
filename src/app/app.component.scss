@@ -28,9 +28,6 @@
 
     &___content:active {
         opacity: 0.5;
-    }
-}
-
 
 h1,
 h2 {
@@ -51,4 +48,136 @@ h6 {
     font-style: normal;
     margin: 0;
     color: #757575;
+}
+
+main {
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  box-sizing: inherit;
+  position: relative;
+  background-image: url('/assets/background.jpg');
+  background-size: cover; /* Asegura que la imagen cubra todo el área */
+  background-position: center; /* Centra la imagen */
+  background-repeat: no-repeat; /* Evita que la imagen se repita */
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Crea columnas automáticamente */
+  gap: 15px; /* Espacio entre las imágenes */
+  max-width: 100%;
+  margin: 0 auto; /* Centrar el grid */
+  padding: 10px; /* Espacio alrededor del grid */
+
+  width: 100%;
+  height: 100vh; /* Ajusta la altura al tamaño completo de la ventana */
+}
+
+.grid-item {
+  overflow: hidden;
+  border-radius: 8px; /* Bordes redondeados */
+  display: flex; /* Para centrar la imagen */
+  justify-content: center; /* Para centrar la imagen */
+  align-items: center; /* Para centrar la imagen */
+}
+
+.grid-item img {
+  width: 100%;
+  height: auto;
+  display: block; /* Eliminar espacios en blanco */
+  transition: transform 0.3s; /* Efecto en hover */
+  border-radius: 8px;
+
+}
+
+.grid-item:hover img {
+  transform: scale(1.05); /* Escalar imagen al hacer hover */
+}
+
+
+.masonry {
+  columns: 2;
+  column-gap: 16px;
+}
+
+.masonry-item {
+  break-inside: avoid;
+  margin-bottom: 16px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.masonry-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.masonry-item:hover img {
+  transform: scale(1.05); /* Escalar imagen al hacer hover */
+}
+
+/* Ajuste de columnas en pantallas más pequeñas */
+
+@media (min-width: 600px) and (max-width: 1024px) {
+    .masonry {
+        columns: 3
+    }
+}
+
+@media (min-width: 1025px) and (max-width: 1440px) {
+    .masonry {
+        columns: 4
+    }
+}
+
+@media (min-width: 1441px) {
+    .masonry {
+        columns: 5
+    }
+}
+//modal
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Make sure the modal is on top of other content */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  max-height: 80vh;
+}
+
+/* Modal Button */
+button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+button:hover {
+  background-color: #0056b3;
 }
