@@ -14,7 +14,8 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 export class AppComponent {
   title = 'subetusfotos';
   photos: any[] = [];
-  folderId = '1QvMXts6IwHxWhakVs8fxHAADkExRnXxV';  selectedFile: File | null = null;
+  folderId = '1QvMXts6IwHxWhakVs8fxHAADkExRnXxV';
+ selectedFiles: File[] = [];
 
   constructor(private driveService: GoogleDriveService, private http: HttpClient) {}
 
@@ -50,21 +51,26 @@ export class AppComponent {
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      this.selectedFile = input.files[0];
+      this.selectedFiles = Array.from(input.files);  // Almacena todos los archivos seleccionados
     }
   }
 
   uploadPhoto2() {
-    if (!this.selectedFile) return;
+    if (this.selectedFiles.length === 0) return;
 
-    const formData = new FormData();
-    formData.append('file', this.selectedFile, this.selectedFile.name);
+    // Itera sobre los archivos seleccionados y los envía uno por uno
+    for (const file of this.selectedFiles) {
+      const formData = new FormData();
+      formData.append('file', file, file.name);
 
-    this.http.post('http://localhost:3000/upload', formData)
-      .subscribe({
-        next: (response) => console.log('Foto subida exitosamente:', response),
-        error: (error) => console.error('Error al subir la foto:', error)
-      });
+      this.http.post('http://localhost:3000/upload', formData)
+        .subscribe({
+          next: (response) => console.log('Foto subida exitosamente:', response),
+          error: (error) => console.error('Error al subir la foto:', error)
+        });
+    }
+
+    this.loadPhotos();  // Refresca la galería
   }
   
 }
