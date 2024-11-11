@@ -183,6 +183,11 @@
     <button (click)="signOut()">Cerrar sesión</button>
     <input type="file" (change)="uploadPhoto($event)" />
   </div>
+  <div>
+    <h2>Sube tu foto</h2>
+    <input type="file" (change)="onFileSelected($event)" />
+    <button (click)="uploadPhoto2()">Subir Foto</button>
+  </div>
   
   <div class="gallery">
     <div *ngFor="let photo of photos" class="photo">
