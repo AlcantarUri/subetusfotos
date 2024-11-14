@@ -44,6 +44,8 @@ export class AppComponent {
 
   async loadPhotos() {
     const response = await this.driveService.listFiles(this.folderId);
+    console.log(response);
+
     this.photos = response.result.files;
   }
 
@@ -81,7 +83,7 @@ export class AppComponent {
       const formData = new FormData();
       formData.append('file', file, file.name);
 
-      this.http.post('http://localhost:3000/upload', formData)
+      this.http.post('https://lb-subetusfotosapi-1523404419.us-east-1.elb.amazonaws.com/v1/upload', formData)
         .subscribe({
           next: (response) => console.log('Foto subida exitosamente:', response),
           error: (error) => console.error('Error al subir la foto:', error)

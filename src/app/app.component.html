@@ -24,8 +24,10 @@
 
 <div *ngIf="isModalOpen" class="modal-overlay" (click)="closeModal()">
   <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="close-div" (click)="closeModal()">
+       ✖
+    </div>
     <img [src]="currentImage.thumbnailLink" [alt]="currentImage.name || 'Image'" />
-    <button (click)="closeModal()">Close</button>
   </div>
 </div>
 
