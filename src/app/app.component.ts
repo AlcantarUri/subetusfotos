@@ -74,7 +74,6 @@ export class AppComponent {
   async loadPhotos() {
     this.isLoading = true;
     const response = await this.driveService.listFiles(this.folderId);
-    this.photos = [];
     // console.log(response);
 
     // this.photos = response.result.files;
