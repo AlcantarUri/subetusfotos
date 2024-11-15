@@ -6,6 +6,10 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { SharedModule } from '../modal/modal.module';
 import { LottieComponent } from 'ngx-lottie';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { initializeApp } from 'firebase/app';
+import { getStorage } from "firebase/storage";
+import { addDoc, collection, getDocs, getFirestore } from "firebase/firestore/lite";
+import { AnonymousSubject } from 'rxjs/internal/Subject';
 
 @Component({
   selector: 'app-root',
@@ -28,6 +32,18 @@ export class AppComponent {
   isModalOpen = false;
 
   modalVisible = true;
+  firebaseConfig = {
+    apiKey: "AIzaSyBQ_9rYAbla-2PR7gKmp7G9xwt3oJv5m54",
+    authDomain: "subetusfotos-22490.firebaseapp.com",
+    projectId: "subetusfotos-22490",
+    storageBucket: "subetusfotos-22490.firebasestorage.app",
+    messagingSenderId: "169574660148",
+    appId: "1:169574660148:web:ec8459bc35ef4f270c7261",
+    measurementId: "G-SY4WLLJR8L"
+  };
+
+  db: any;
+  likesCollection: any;
   constructor(
     private driveService: GoogleDriveService,
     private http: HttpClient) {}
@@ -40,6 +56,10 @@ export class AppComponent {
       await this.driveService.signIn();
     }
     this.loadPhotos();
+    const app = initializeApp(this.firebaseConfig);
+    this.db = getFirestore(app);
+    console.log(await this.getLikes());
+
   }
 
   async loadPhotos() {
@@ -83,7 +103,7 @@ export class AppComponent {
       const formData = new FormData();
       formData.append('file', file, file.name);
 
-      this.http.post('http://lb-subetusfotosapi-1523404419.us-east-1.elb.amazonaws.com/upload', formData)
+      this.http.post('https://subetusfotosapi.click/upload', formData)
         .subscribe({
           next: (response) => console.log('Foto subida exitosamente:', response),
           error: (error) => console.error('Error al subir la foto:', error)
@@ -96,9 +116,7 @@ export class AppComponent {
   currentImage: any;
   openImage(photo: any) {
     this.currentImage = photo;
-    console.log(photo);
     this.openModal()
-
   }
 
   openModal(): void {
@@ -109,4 +127,44 @@ export class AppComponent {
   closeModal(): void {
     this.isModalOpen = false;
   }
+
+
+  async getLikes() {
+    this.likesCollection = collection(this.db, 'likedPhotos');
+    const likesSnapshot = await getDocs(this.likesCollection);
+    const likesList = likesSnapshot.docs.map(doc => doc.data());
+    return likesList;
+  }
+
+  async addLikeData(photo: any) {
+    try {
+      const docRef = await addDoc(this.likesCollection, {
+        likesCount: "1",
+        photoId: photo.id,
+        timestamp: new Date() // Timestamp actual
+      });
+      console.log("Documento agregado con ID: ", docRef.id);
+    } catch (error) {
+      console.error("Error al agregar documento: ", error);
+    }
+  }
+
+  isLiked: boolean = false;
+  likeCount: number = 0;
+
+  async toggleLike(currentImage:any) {
+    console.log('toggleLike', currentImage);
+    try {
+      const docRef = await addDoc(this.likesCollection, {
+        likesCount: "1",
+        photoId: currentImage.id,
+        timestamp: new Date() // Timestamp actual
+      });
+      console.log("Documento agregado con ID: ", docRef.id);
+    } catch (error) {
+      console.error("Error al agregar documento: ", error);
+    }
+    this.likeCount += 1;
+  }
+
 }

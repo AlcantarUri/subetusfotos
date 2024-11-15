@@ -28,6 +28,9 @@
        ✖
     </div>
     <img [src]="currentImage.thumbnailLink" [alt]="currentImage.name || 'Image'" />
+    <div class="like-button" (click)="toggleLike(currentImage)">
+      👍 <span class="like-count">{{ likeCount }}</span>
+    </div>
   </div>
 </div>
 
