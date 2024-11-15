@@ -4,6 +4,9 @@
 
   <div class="masonry">
     <div class="masonry-item" *ngFor="let photo of photos">
+      <div *ngIf="photo.totalLikes" class="likesPill">
+        👍 {{ photo.totalLikes }}
+      </div>
       <img (click)="openImage(photo)" [src]="photo.thumbnailLink" [alt]="photo.name || 'Image'" />
     </div>
   </div>
@@ -29,7 +32,7 @@
     </div>
     <img [src]="currentImage.thumbnailLink" [alt]="currentImage.name || 'Image'" />
     <div class="like-button" (click)="toggleLike(currentImage)">
-      👍 <span class="like-count">{{ likeCount }}</span>
+      👍 <span class="like-count">{{ currentImage.totalLikes }}</span>
     </div>
   </div>
 </div>

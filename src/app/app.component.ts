@@ -10,6 +10,7 @@ import { initializeApp } from 'firebase/app';
 import { getStorage } from "firebase/storage";
 import { addDoc, collection, getDocs, getFirestore } from "firebase/firestore/lite";
 import { AnonymousSubject } from 'rxjs/internal/Subject';
+import * as lodash from 'lodash';
 
 @Component({
   selector: 'app-root',
@@ -48,6 +49,8 @@ export class AppComponent {
     private driveService: GoogleDriveService,
     private http: HttpClient) {}
 
+    sumLikes: any;
+
   async ngOnInit() {
     if(localStorage.getItem('MODAL_VISIBLE') === 'false') {
       this.modalVisible = false;
@@ -58,15 +61,21 @@ export class AppComponent {
     this.loadPhotos();
     const app = initializeApp(this.firebaseConfig);
     this.db = getFirestore(app);
-    console.log(await this.getLikes());
+    this.sumLikes = this.groupAndSumLikes(await this.getLikes())
+
 
   }
 
   async loadPhotos() {
     const response = await this.driveService.listFiles(this.folderId);
-    console.log(response);
+    // console.log(response);
 
-    this.photos = response.result.files;
+    // this.photos = response.result.files;
+    // console.log(this.photos);
+    this.photos = this.mergeDataById(response.result.files, this.sumLikes);
+    console.log(this.photos);
+
+
   }
 
   async uploadPhoto(event: any) {
@@ -75,6 +84,35 @@ export class AppComponent {
       await this.driveService.uploadFile(file, this.folderId);
       this.loadPhotos(); // Refresh gallery
     }
+  }
+
+  groupAndSumLikes(items: any) {
+    // Agrupar los elementos por ID
+    const grouped = lodash.groupBy(items, 'photoId');
+    console.log(grouped);
+
+
+    // Transformar los grupos en un nuevo arreglo sumando los likes
+    return lodash.map(grouped, (group, photoId) => {
+      return {
+        id: photoId,
+        totalLikes: group.length // Suma los valores de likes
+      };
+    });
+  }
+
+  mergeDataById(
+    array1: any,
+    array2: any
+  ) {
+    // Crear un mapa del segundo arreglo para acceder rápidamente por ID
+    const mapArray2 = lodash.keyBy(array2, 'id');
+
+    // Iterar sobre el primer arreglo y agregar los datos del segundo cuando coincidan
+    return lodash.map(array1, (item) => {
+      const extraData = mapArray2[item.id]; // Busca el objeto con el mismo ID en array2
+      return extraData ? { ...item, ...extraData } : item; // Combina los objetos si hay coincidencia
+    });
   }
 
   signOut() {
@@ -124,8 +162,9 @@ export class AppComponent {
   }
 
 
-  closeModal(): void {
+  async closeModal() {
     this.isModalOpen = false;
+    this.photos = this.mergeDataById(this.photos, this.groupAndSumLikes(await this.getLikes()));
   }
 
 

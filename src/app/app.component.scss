@@ -243,3 +243,13 @@ button:hover {
   100% { transform: scale(1); }
 }
 
+.likesPill {
+  display: flex;
+  height: 20px;
+  width: 50px;
+  background-color: aliceblue;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+}
