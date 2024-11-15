@@ -11,6 +11,8 @@ import { getStorage } from "firebase/storage";
 import { addDoc, collection, getDocs, getFirestore } from "firebase/firestore/lite";
 import { AnonymousSubject } from 'rxjs/internal/Subject';
 import * as lodash from 'lodash';
+import { DATA_FAKE } from '../typings/data';
+
 
 @Component({
   selector: 'app-root',
@@ -25,12 +27,13 @@ import * as lodash from 'lodash';
 })
 export class AppComponent {
   title = 'subetusfotos';
-  photos: any[] = [];
+  photos: any[] = DATA_FAKE
   folderId = '1QvMXts6IwHxWhakVs8fxHAADkExRnXxV';
   selectedFiles: File[] = [];
   everageHeight = 200;
   isOpen: boolean = false;  // Controls whether the modal is open or not
   isModalOpen = false;
+  isProcessing = false;
 
   modalVisible = true;
   firebaseConfig = {
@@ -42,6 +45,8 @@ export class AppComponent {
     appId: "1:169574660148:web:ec8459bc35ef4f270c7261",
     measurementId: "G-SY4WLLJR8L"
   };
+
+  isLoading = true
 
   db: any;
   likesCollection: any;
@@ -67,12 +72,16 @@ export class AppComponent {
   }
 
   async loadPhotos() {
+    this.isLoading = true;
     const response = await this.driveService.listFiles(this.folderId);
+    this.photos = [];
     // console.log(response);
 
     // this.photos = response.result.files;
     // console.log(this.photos);
     this.photos = this.mergeDataById(response.result.files, this.sumLikes);
+
+    this.isLoading = false;
     console.log(this.photos);
 
 
@@ -135,6 +144,7 @@ export class AppComponent {
 
   uploadPhoto2() {
     if (this.selectedFiles.length === 0) return;
+    this.isProcessing = true;
 
     // Itera sobre los archivos seleccionados y los envía uno por uno
     for (const file of this.selectedFiles) {
@@ -143,12 +153,21 @@ export class AppComponent {
 
       this.http.post('https://subetusfotosapi.click/upload', formData)
         .subscribe({
-          next: (response) => console.log('Foto subida exitosamente:', response),
-          error: (error) => console.error('Error al subir la foto:', error)
+          next: (response) => {
+            setTimeout(() => {
+              this.isProcessing = false;
+              this.loadPhotos();
+              
+            }, 5000);
+            console.log('Foto subida exitosamente:', response)
+          },
+          error: (error) => {
+            console.error('Error al subir la foto:', error)
+            this.isProcessing = false;
+          }
         });
     }
-
-    this.loadPhotos();  // Refresca la galería
+  // Refresca la galería
   }
 
   currentImage: any;

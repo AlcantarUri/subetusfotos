@@ -1,13 +1,21 @@
 
+<div *ngIf="isLoading">
+  <app-loading ></app-loading>
+  
+</div>
+<div *ngIf="isProcessing">
+  <app-loading text="las imagenes estan siendo procesadas"></app-loading>
+  
+</div>
 <main class="main" [ngStyle]="{overFlow: modalVisible ? 'hidden': 'unset'}">
 
 
   <div class="masonry">
     <div class="masonry-item" *ngFor="let photo of photos">
       <div *ngIf="photo.totalLikes" class="likesPill">
-        👍 {{ photo.totalLikes }}
+        <img src="assets/images/love.svg" alt=""> <span class="like-count">{{ photo.totalLikes }}</span>
       </div>
-      <img (click)="openImage(photo)" [src]="photo.thumbnailLink" [alt]="photo.name || 'Image'" />
+      <img (click)="openImage(photo)" [src]="photo.thumbnailLink" [alt]="photo.name || 'Image'" loading="lazy" />
     </div>
   </div>
 
@@ -32,7 +40,8 @@
     </div>
     <img [src]="currentImage.thumbnailLink" [alt]="currentImage.name || 'Image'" />
     <div class="like-button" (click)="toggleLike(currentImage)">
-      👍 <span class="like-count">{{ currentImage.totalLikes }}</span>
+      <ng-lottie width="50px" height="50px" class="lottielike" [options]="{path: '/assets/lottie/like.json'}" />
+      <span class="like-count">{{ currentImage.totalLikes }}</span>
     </div>
   </div>
 </div>

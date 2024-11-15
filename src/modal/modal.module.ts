@@ -3,10 +3,12 @@ import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { ModalComponent } from "./modal.component";
 import { LottieComponent } from "ngx-lottie";
+import { LoadingComponent } from "../loading/loading.component";
 
 @NgModule({
     declarations: [
-        ModalComponent
+        ModalComponent,
+        LoadingComponent
     ],
     imports: [
         CommonModule,
@@ -19,7 +21,8 @@ import { LottieComponent } from "ngx-lottie";
     providers: [
     ],
     exports: [
-        ModalComponent
+        ModalComponent,
+        LoadingComponent
     ]
   })
   export class SharedModule { } 
